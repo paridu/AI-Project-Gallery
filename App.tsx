@@ -24,7 +24,8 @@ const App: React.FC = () => {
 
   const filteredProjects = useMemo(() => {
     return PROJECTS.filter(project => {
-      const matchesCategory = selectedCategory === 'All' || project.category === selectedCategory;
+      // Fix: Cast selectedCategory to Category to avoid "no overlap" error with 'All' literal
+      const matchesCategory = selectedCategory === 'All' || project.category === (selectedCategory as Category);
       const matchesSearch = 
         project.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
         project.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -37,7 +38,7 @@ const App: React.FC = () => {
     });
   }, [selectedCategory, searchQuery, selectedTechs]);
 
-  const categories = ['All', ...Object.values(Category).filter(c => c !== 'All')];
+  const categories = ['All', ...Object.values(Category).filter(c => c !== Category.ALL)];
 
   // Helper to get Thai label for 'All'
   const getCategoryLabel = (cat: string) => cat === 'All' ? 'ทั้งหมด' : cat;
